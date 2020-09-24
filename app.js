@@ -8,8 +8,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.post('/webhook', (req, res) => {
   let reply_token = req.body.events[0].replyToken
-  console.log('/webhook',res)
-  reply(reply_token)
+  let msg = req.body.events[0].message.text
+  reply(reply_token,msg)
   res.sendStatus(200)
 })
 app.use("*", (req, res) => {
@@ -20,7 +20,7 @@ app.listen(PORT,() => {
   console.log(`server start port ${PORT}`);
 })
 
-function reply(reply_token) {
+function reply(reply_token,msg) {
   let headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer {${access_token}}`
@@ -29,19 +29,15 @@ function reply(reply_token) {
       replyToken: reply_token,
       messages: [{
           type: 'text',
-          text: 'Hello'
-      },
-      {
-          type: 'text',
-          text: 'How are you?'
-      }]
+          text: msg
+      }
+      ]
   })
   request.post({
       url: 'https://api.line.me/v2/bot/message/reply',
       headers: headers,
       body: body
   }, (err, res, body) => {
-      console.log('/request',res)
       console.log('status = ' + res.statusCode);
   });
 }
