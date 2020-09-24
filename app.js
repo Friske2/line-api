@@ -8,6 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.post('/webhook', (req, res) => {
   let reply_token = req.body.events[0].replyToken
+  console.log('/webhook',res)
   reply(reply_token)
   res.sendStatus(200)
 })
@@ -40,6 +41,7 @@ function reply(reply_token) {
       headers: headers,
       body: body
   }, (err, res, body) => {
+      console.log('/request',res)
       console.log('status = ' + res.statusCode);
   });
 }
