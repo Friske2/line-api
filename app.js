@@ -6,6 +6,7 @@ http.createServer(app).listen(3000, () => {
      console.log("server status : running");
      console.log(`run on port : ${PORT}`);
 });
+app.post('/webhook', (req, res) => res.sendStatus(200))
 app.use("*", (req, res) => {
      console.log("enter route");
      let text = "Hi <a href='https://medium.com/bakatest-          me'>https://medium.com/bakatest-me</a>";
