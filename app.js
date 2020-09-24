@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 const app = express();
 const PORT = process.env.PORT || 3000;
-http.createServer(app).listen(3000, () => {
+http.createServer(app).listen(PORT, () => {
      console.log("server status : running");
      console.log(`run on port : ${PORT}`);
 });
