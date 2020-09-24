@@ -22,7 +22,7 @@ app.listen(PORT,() => {
 function reply(reply_token) {
   let headers = {
       'Content-Type': 'application/json',
-      'Authorization': access_token
+      'Authorization': `Bearer {${access_token}}`
   }
   let body = JSON.stringify({
       replyToken: reply_token,
