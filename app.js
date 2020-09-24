@@ -8,7 +8,6 @@ http.createServer(app).listen(3000, () => {
 });
 app.post('/webhook', (req, res) => res.sendStatus(200))
 app.use("*", (req, res) => {
-     console.log("enter route");
-     let text = "Hi <a href='https://medium.com/bakatest-          me'>https://medium.com/bakatest-me</a>";
+     let text = "Hello world";
      return res.send(text);
 })
