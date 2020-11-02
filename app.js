@@ -21,7 +21,8 @@ app.listen(PORT,() => {
 })
 
 function reply(reply_token,msg) {
-  if(msg === '#checkin') {
+  if(msg === '#checkout' || msg === '#checkin') {
+    let status = msg === '#checkout' ? 'checkout' : 'checkin'
     let headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer {${access_token}}`
@@ -34,21 +35,31 @@ function reply(reply_token,msg) {
         }
         ]
     })
-    let formValue = new FormData()
-    formValue.append('actionstate','checkin')
-    formValue.append('employee','checkin')
-    formValue.append('in_time','')
-    formValue.append('latitude','13.7456517')
-    formValue.append('longitude','100.5408732')
     request.post({
       url:'https://hr-terrabit-uat.demo1.webcontrol.com/app/branch1/api.php',
-      body: formValue
+      headers: {
+        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'
+      },
+      formData: {
+        actionstate:status,
+        employee:'29',
+        in_time:'',
+        latitude:'13.7456517',
+        longitude:'100.5408732'
+      }
     }, (err,res,body)=> {
       try {
         request.post({
             url: 'https://api.line.me/v2/bot/message/reply',
             headers: headers,
-            body: res
+            body: JSON.stringify({
+              replyToken: reply_token,
+              messages: [{
+                type: 'text',
+                text: status === 'checkin' ? res.body.logtime : res.body
+              }
+              ]
+          })
         }, (err, res, body) => {
           try {
             console.log(res,body,err)
@@ -61,7 +72,7 @@ function reply(reply_token,msg) {
         request.post({
           url: 'https://api.line.me/v2/bot/message/reply',
           headers: headers,
-          body: error
+          body: JSON.stringify(err)
         }, (err, res, body) => {
           try {
             console.log(res,body,err)
