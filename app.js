@@ -56,7 +56,7 @@ function reply(reply_token,msg) {
               replyToken: reply_token,
               messages: [{
                 type: 'text',
-                text: status === 'checkin' ? res.body.logtime : res.body
+                text: status === 'checkin' ? JSON.stringify(res) : res.body
               }
               ]
           })
